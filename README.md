@@ -1,51 +1,55 @@
-# vue-patterns
+# Vue 實作模式 (learn-vuejs) 中文版
 
-Useful Vue patterns, techniques, tips and tricks and helpful curated links.
+英文原版：[learn-vuejs](https://github.com/learn-vuejs/vue-patterns)  
+中文翻譯：[yoyoys](https://github.com/yoyoys)
 
-- [Component Declaration](#component-declaration)
-  - [Single File Component(a.k.a: SFC) - Most Common](#single-file-componentaka-sfc---most-common)
-  - [String Template (or es6 Template Literal)](#string-template-or-es6-template-literal)
-  - [Render Function](#render-function)
-  - [JSX](#jsx)
-  - [vue-class-component](#vue-class-component)
-- [Component Conditional Rendering](#component-conditional-rendering)
-  - [Directives (v-if / v-else / v-else-if / v-show)](#directives-v-if--v-else--v-else-if--v-show)
-  - [JSX](#jsx-1)
-- [Dynamic Component](#dynamic-component)
-  - [<component> with is attribute](#component-with-is-attribute)
-- [Composition](#composition)
-  - [Basic Composition](#basic-composition)
-  - [Extends](#extends)
-  - [Mixins](#mixins)
-  - [Slots (Default)](#slots-default)
-  - [Named Slots](#named-slots)
-  - [Scoped Slots](#scoped-slots)
-  - [Render Props](#render-props)
-- [Passing Props](#passing-props)
-- [Higher Order Component (a.k.a HOC)](#higher-order-component-aka-hoc)
-- [Dependency injection](#dependency-injection)
-  - [Provide / Inject](#provide--inject)
-  - [@Provide / @Inject Decorator](#provide--inject-decorator)
-- [Handling Errors](#handling-errors)
-  - [errorCaptured Hook](#errorcaptured-hook)
-- [Productivity Tips](#productivity-tips)
-- [Useful Links](#useful-links)
-  - [Component Communication](#component-communication)
-  - [Refactoring](#refactoring)
-  - [Vuex](#vuex)
-  - [Mobx](#mobx)
-  - [Renderless Component](#renderless-component)
-  - [Folder Structure](#folder-structure)
-  - [Tips & Tricks](#tips--tricks)
-  - [Repos](#repos)
-  - [Anti Patterns](#anti-patterns)
-  - [Videos / Audios](#videos--audios)
-  - [Paid](#paid)
-  - [Misc](#misc)
+此頁面集結了許多有用的 Vue 實作模式、技術、技巧、以及有幫助的參考連結。
 
-## Component Declaration
+- [Vue 實作模式 (learn-vuejs) 中文版](#vue-%E5%AF%A6%E4%BD%9C%E6%A8%A1%E5%BC%8F-learn-vuejs-%E4%B8%AD%E6%96%87%E7%89%88)
+  - [元件宣告](#%E5%85%83%E4%BB%B6%E5%AE%A3%E5%91%8A)
+    - [單文件組件(Single File Component, SFC) - 最為常見](#%E5%96%AE%E6%96%87%E4%BB%B6%E7%B5%84%E4%BB%B6single-file-component-sfc---%E6%9C%80%E7%82%BA%E5%B8%B8%E8%A6%8B)
+    - [字串樣板 (String Template) (或是 es6 樣板字面值 (Template Literal)))](#%E5%AD%97%E4%B8%B2%E6%A8%A3%E6%9D%BF-string-template-%E6%88%96%E6%98%AF-es6-%E6%A8%A3%E6%9D%BF%E5%AD%97%E9%9D%A2%E5%80%BC-template-literal)
+    - [渲染函式 (Render Function)](#%E6%B8%B2%E6%9F%93%E5%87%BD%E5%BC%8F-render-function)
+    - [JSX](#jsx)
+    - [vue-class-component (使用 es6 classes)](#vue-class-component-%E4%BD%BF%E7%94%A8-es6-classes)
+      - [參考連結](#%E5%8F%83%E8%80%83%E9%80%A3%E7%B5%90)
+  - [元件條件渲染 (Component Conditional Rendering)](#%E5%85%83%E4%BB%B6%E6%A2%9D%E4%BB%B6%E6%B8%B2%E6%9F%93-component-conditional-rendering)
+    - [指令 (Directives) (`v-if` / `v-else` / `v-else-if` / `v-show`)](#%E6%8C%87%E4%BB%A4-directives-v-if--v-else--v-else-if--v-show)
+    - [JSX](#jsx)
+  - [動態元件](#%E5%8B%95%E6%85%8B%E5%85%83%E4%BB%B6)
+  - [元件組合](#%E5%85%83%E4%BB%B6%E7%B5%84%E5%90%88)
+    - [基本組合 (Basic Composition)](#%E5%9F%BA%E6%9C%AC%E7%B5%84%E5%90%88-basic-composition)
+    - [繼承 (Extends)](#%E7%B9%BC%E6%89%BF-extends)
+    - [混入 (Mixins)](#%E6%B7%B7%E5%85%A5-mixins)
+    - [預設插槽 (Slots (Default))](#%E9%A0%90%E8%A8%AD%E6%8F%92%E6%A7%BD-slots-default)
+    - [具名插槽(Named Slots)](#%E5%85%B7%E5%90%8D%E6%8F%92%E6%A7%BDnamed-slots)
+    - [作用域插槽 (Scoped Slots)](#%E4%BD%9C%E7%94%A8%E5%9F%9F%E6%8F%92%E6%A7%BD-scoped-slots)
+    - [渲染屬性 (Render Props)](#%E6%B8%B2%E6%9F%93%E5%B1%AC%E6%80%A7-render-props)
+  - [參數傳遞 (Passing Props)](#%E5%8F%83%E6%95%B8%E5%82%B3%E9%81%9E-passing-props)
+  - [高優先元件 (Higher Order Component, HOC)](#%E9%AB%98%E5%84%AA%E5%85%88%E5%85%83%E4%BB%B6-higher-order-component-hoc)
+  - [相依注入 (Dependency injection)](#%E7%9B%B8%E4%BE%9D%E6%B3%A8%E5%85%A5-dependency-injection)
+    - [**提供** 與 **注入** (Provide / Inject)](#%E6%8F%90%E4%BE%9B-%E8%88%87-%E6%B3%A8%E5%85%A5-provide--inject)
+    - [注入裝飾器模式 (@Provide / @Inject Decorator)](#%E6%B3%A8%E5%85%A5%E8%A3%9D%E9%A3%BE%E5%99%A8%E6%A8%A1%E5%BC%8F-provide--inject-decorator)
+  - [錯誤處理 (Handling Errors)](#%E9%8C%AF%E8%AA%A4%E8%99%95%E7%90%86-handling-errors)
+    - [`errorCaptured` 事件](#errorcaptured-%E4%BA%8B%E4%BB%B6)
+  - [生產力小技巧](#%E7%94%9F%E7%94%A2%E5%8A%9B%E5%B0%8F%E6%8A%80%E5%B7%A7)
+  - [有用的連結](#%E6%9C%89%E7%94%A8%E7%9A%84%E9%80%A3%E7%B5%90)
+    - [組建間的溝通](#%E7%B5%84%E5%BB%BA%E9%96%93%E7%9A%84%E6%BA%9D%E9%80%9A)
+    - [重構技巧](#%E9%87%8D%E6%A7%8B%E6%8A%80%E5%B7%A7)
+    - [Vuex](#vuex)
+    - [Mobx](#mobx)
+    - [不須渲染的元件 (Renderless Component)](#%E4%B8%8D%E9%A0%88%E6%B8%B2%E6%9F%93%E7%9A%84%E5%85%83%E4%BB%B6-renderless-component)
+    - [目錄結構](#%E7%9B%AE%E9%8C%84%E7%B5%90%E6%A7%8B)
+    - [小技巧](#%E5%B0%8F%E6%8A%80%E5%B7%A7)
+    - [專案範例](#%E5%B0%88%E6%A1%88%E7%AF%84%E4%BE%8B)
+    - [不良示範 (反模式)](#%E4%B8%8D%E8%89%AF%E7%A4%BA%E7%AF%84-%E5%8F%8D%E6%A8%A1%E5%BC%8F)
+    - [影片與音訊課程](#%E5%BD%B1%E7%89%87%E8%88%87%E9%9F%B3%E8%A8%8A%E8%AA%B2%E7%A8%8B)
+    - [付費課程](#%E4%BB%98%E8%B2%BB%E8%AA%B2%E7%A8%8B)
+    - [其他資訊](#%E5%85%B6%E4%BB%96%E8%B3%87%E8%A8%8A)
 
-### Single File Component(a.k.a: SFC) - Most Common
+## 元件宣告
+
+### 單文件組件(Single File Component, SFC) - 最為常見
 
 ```html
 <template>
@@ -76,7 +80,7 @@ export default {
 </style>
 ```
 
-### String Template (or es6 Template Literal)
+### 字串樣板 (String Template) (或是 es6 樣板字面值 (Template Literal)))
 
 ```js
 Vue.component('my-btn', {
@@ -98,7 +102,7 @@ Vue.component('my-btn', {
 });
 ```
 
-### Render Function
+### 渲染函式 (Render Function)
 
 ```js
 Vue.component('my-btn', {
@@ -114,12 +118,12 @@ Vue.component('my-btn', {
   },
   render(h) {
     return h('button', {
-        attrs: {
-          class: 'btn-primary'
-        },
-        on: {
-          click: this.handleClick,
-        },
+      attrs: {
+        class: 'btn-primary'
+      },
+      on: {
+        click: this.handleClick,
+      },
     });
   },
 });
@@ -149,7 +153,7 @@ Vue.component('my-btn', {
 });
 ```
 
-### [vue-class-component](https://github.com/vuejs/vue-class-component)
+### [vue-class-component](https://github.com/vuejs/vue-class-component) (使用 es6 classes)
 
 ```html
 <template>
@@ -179,59 +183,58 @@ export default MyBtn extends Vue {
 </style>
 ```
 
-#### References:
+#### 參考連結
 
 * [7 Ways To Define A Component Template in VueJS](https://medium.com/js-dojo/7-ways-to-define-a-component-template-in-vuejs-c04e0c72900d)
 
-## Component Conditional Rendering
+## 元件條件渲染 (Component Conditional Rendering)
 
-### Directives (`v-if` / `v-else` / `v-else-if` / `v-show`)
+### 指令 (Directives) (`v-if` / `v-else` / `v-else-if` / `v-show`)
 
 `v-if`
 
 ```html
-<h1 v-if="true">Render only if v-if condition is true</h1>
+<h1 v-if="true">只在 v-if 值為 true 時渲染</h1>
 ```
 
-`v-if` and `v-else`
+`v-if` 與 `v-else`
 
 ```html
-<h1 v-if="true">Render only if v-if condition is true</h1>
-<h1 v-else>Render only if v-if condition is false</h1>
+<h1 v-if="true">只在 v-if 值為 true 時渲染</h1>
+<h1 v-else>只在 v-if 值為 false 時渲染</h1>
 ```
 
 `v-else-if`
 
 ```html
-<div v-if="type === 'A'">Render only if `type` is equal to `A`</div>
-<div v-else-if="type === 'B'">Render only if `type` is equal to `B`</div>
-<div v-else-if="type === 'C'">Render only if `type` is equal to `C`</div>
-<div v-else>Render if `type` is not `A` or `B` or `C`</div>
+<div v-if="type === 'A'">只在 `type` 等於 `A` 時渲染</div>
+<div v-else-if="type === 'B'">只在 `type` 等於 `B` 時渲染</div>
+<div v-else-if="type === 'C'">只在 `type` 等於 `C` 時渲染</div>
+<div v-else>只在 `type` 不等於>fmf `A` 或 `B` 或 `C` 時渲染</div>
 ```
 
 `v-show`
 
 ```html
-<h1 v-show="true">Always rendered, but it should be visible only if `v-show` conditions is true</h1>
+<h1 v-show="true">永遠都會渲染，但是只在 `v-show` 值為 true 時顯示</h1>
 ```
 
-If you want to conditionally render more than one element,
-you can use directives(`v-if` / `v-else` / `v-else-if` /`v-show`) on a `<template>` element.
-Notice that `<template>` element is not actually rendered into DOM. It is an invisible wrapper.
+如果你需要同時在多個元素上面做條件式渲染，你可以在 `<template>` 元素上使用這些指令 (`v-if` / `v-else` / `v-else-if` /`v-show`)。
+注意：`<template>` 元素不會實際渲染一個 DOM。
 
 ```html
 <template v-if="true">
-  <h1>All the elements</h1>
-  <p>will be rendered into DOM</p>
-  <p>except `template` element</p>
+  <h1>所有元素</h1>
+  <p>都會被渲染成為 DOM</p>
+  <p>除了 `template` 元素</p>
 </template>
 ```
 
 ### JSX
 
-If you use JSX in your vue application, you can apply all the techniques such as `if else` and `switch case` statement and `ternary` and `logical` operator.
+如果你在你的 Vue 應用程式中使用 JSX，你可以使用所有 javascript 語句，例如 `if else` 、 `switch case` 、三元運算 (`ternary`) 與 邏輯運算式 (logical operator)
 
-`if else` statement
+`if else` 語句
 
 ```jsx
 export default {
@@ -242,15 +245,15 @@ export default {
   },
   render(h) {
     if (this.isTruthy) {
-      return <h1>Render value is true</h1>;
+      return <h1>值為真時渲染</h1>;
     } else {
-      return <h1>Render value is false</h1>;
+      return <h1>值為假時渲染</h1>;
     }
   },
 };
 ```
 
-`switch case` statement
+`switch case` 語句
 
 ```jsx
 import Info from './Info';
@@ -274,12 +277,12 @@ export default {
         return <Error text={text} />;
       default:
         return <Success text={text} />;
-    }
-  },
+    },
+  }
 };
 ```
 
-or you can use `object` map to simplify `switch case`
+你也可以透過物件的對應來簡化 `switch case`
 
 ```jsx
 import Info from './Info';
@@ -308,7 +311,7 @@ export default {
 };
 ```
 
-`ternary` operator
+三元運算子 (ternary operator)
 
 ```jsx
 export default {
@@ -321,9 +324,9 @@ export default {
     return (
       <div>
         {this.isTruthy ? (
-          <h1>Render value is true</h1>
+          <h1>值為真時渲染</h1>
         ) : (
-          <h1>Render value is false</h1>
+          <h1>值為假時渲染</h1>
         )}
       </div>
     );
@@ -331,7 +334,7 @@ export default {
 };
 ```
 
-`logical` operator
+邏輯運算子 (logical operator)
 
 ```jsx
 export default {
@@ -345,22 +348,23 @@ export default {
   },
 };
 ```
-#### References
+#### 參考連結
 * [Difference Between v-if and v-show [With Video at End]](https://dzone.com/articles/difference-between-v-if-and-v-show-with-a-video)
 
-## Dynamic Component
+## 動態元件
 
-### `<component>` with `is` attribute
+### 使用 `is` 屬性在 `<component>`  元素上
 
-* [Example 1](https://jsfiddle.net/chrisvfritz/o3nycadu/)
-* [Example 2](https://jsfiddle.net/chrisvfritz/b2qj69o1/)
-* [Example 3](https://alligator.io/vuejs/dynamic-components/)
+* [範例 1](https://jsfiddle.net/chrisvfritz/o3nycadu/)
+* [範例 2](https://jsfiddle.net/chrisvfritz/b2qj69o1/)
+* [範例 3](https://alligator.io/vuejs/dynamic-components/)
 
 ```html
 <component :is="currentTabComponent"></component>
 ```
 
-With the above code example, rendered component will be destroyed if a different component is rendered in `<component>`. If you want components to keep their instances without being destroyed within `<component>` tag, you can wrap the `<component>` tag in a `<keep-alive>` tag like so:
+上面的範例，原有 `<component>` 中的元件，在切換元件的同時將會被消滅。
+如果你需要切換後仍保留 `<component>` 中元件的實體，而不被消滅的話，可以包裹一個 `<keep-alive>` 標籤，如下：
 
 ```html
 <keep-alive>
@@ -368,9 +372,9 @@ With the above code example, rendered component will be destroyed if a different
 </keep-alive>
 ```
 
-## Composition
+## 元件組合
 
-### Basic Composition
+### 基本組合 (Basic Composition)
 
 ```html
 <template>
@@ -390,9 +394,9 @@ export default {
 </script>
 ```
 
-### Extends
+### 繼承 (Extends)
 
-When you want to extend a single vue component
+當你需要繼承一個單文件組件 (SFC) 時可以使用。
 
 ```html
 <template>
@@ -411,11 +415,11 @@ export default {
 </script>
 ```
 
-#### References:
+#### 參考連結
 
 * [Extending VueJS Components](https://medium.com/js-dojo/extending-vuejs-components-42fefefc688b)
 
-### Mixins
+### 混入 (Mixins)
 
 ```js
 // closableMixin.js
@@ -462,12 +466,12 @@ export deafult {
 </script>
 ```
 
-#### References:
+#### 參考連結
 
 * [Practical use of Components and Mixins in Vue JS](http://www.qcode.in/practical-use-of-components-and-mixins-in-vue-js/)
 
 
-### Slots (Default)
+### 預設插槽 (Slots (Default))
 
 ```html
 <template>
@@ -502,12 +506,12 @@ export default {
 </script>
 ```
 
-#### References:
+#### 參考連結
 
 * [Understanding Component Slots with Vue.js](https://alligator.io/vuejs/component-slots/)
 * [Composing Custom Elements With Slots And Named Slots](https://alligator.io/web-components/composing-slots-named-slots/)
 
-### Named Slots
+### 具名插槽(Named Slots)
 
 BaseLayout.vue
 
@@ -530,19 +534,19 @@ App.vue
 ```html
 <base-layout>
   <template slot="header">
-    <h1>Here might be a page title</h1>
+    <h1>這裡是頁面標題</h1>
   </template>
 
-  <p>A paragraph for the main content.</p>
-  <p>And another one.</p>
+  <p>一段文件主體內的文字</p>
+  <p>另外一段文字</p>
 
   <template slot="footer">
-    <p>Here's some contact info</p>
+    <p>一些聯絡資訊</p>
   </template>
 </base-layout>
 ```
 
-### Scoped Slots
+### 作用域插槽 (Scoped Slots)
 
 ```html
 <template>
@@ -551,8 +555,8 @@ App.vue
       v-for="todo in todos"
       v-bind:key="todo.id"
     >
-      <!-- We have a slot for each todo, passing it the -->
-      <!-- `todo` object as a slot prop.                -->
+      <!-- 保留一個插槽供每一個 todo 使用，-->
+      <!-- 並將 將 `todo` 物件作為插槽參數傳遞給它，供外部元件使用。-->
       <slot v-bind:todo="todo">
         {{ todo.text }}
       </slot>
@@ -604,7 +608,7 @@ export default {
 </script>
 ```
 
-#### References:
+#### 參考資料
 
 * [Getting Your Head Around Vue.js Scoped Slots](https://medium.com/js-dojo/getting-your-head-around-vue-js-scoped-slots-281bf82a1e4e)
 * [Understanding scoped slots in Vue.js](https://medium.com/corebuild-software/understanding-scoped-slots-in-vue-js-db5315a42391)
@@ -612,11 +616,11 @@ export default {
 * [The Trick to Understanding Scoped Slots in Vue.js](https://adamwathan.me/the-trick-to-understanding-scoped-slots-in-vuejs/)
 * [The Power of Scoped Slots in Vue](https://pineco.de/power-scoped-slots-vue/)
 
-### Render Props
+### 渲染屬性 (Render Props)
 
-In most cases, you can use scoped slots instead of render props. But, it might be useful in some case.
+大多數狀況下，你可以優先使用作用域插槽 (Scoped Slots) 之於渲染屬性 (Render Props)，但是，在某些狀況下渲染屬性還是很有用的。
 
-with `SFC`
+於單文件組件：
 
 ```html
 <template>
@@ -652,7 +656,7 @@ export default {
 </style>
 ```
 
-with `JSX`
+於 `JSX`
 
 ```js
 const Mouse = {
@@ -687,15 +691,15 @@ const Mouse = {
 export default Mouse;
 ```
 
-#### References:
+#### 參考連結
 
 * [Leveraging Render Props in Vue](https://medium.com/@dillonchanis/leveraging-render-props-in-vue-7eb9a19c262d)
 * [Use a Vue.js Render Prop!](https://medium.com/js-dojo/use-a-vue-js-render-prop-98880bc44e05)
 
-## Passing Props
+## 參數傳遞 (Passing Props)
 
-Sometimes, you may want to pass props and listeners to child component without having to declare all child component's props.
-You can simply bind `$attrs` and `$listeners` to child component
+有時候你想要傳遞所有參數 (props) 與事件 (listeners) 到子元件，但又不想要宣告所有子元件的參數。
+你可以直接將 `$attrs` 與 `$listeners` 綁定在子元件上。
 
 ```html
 <template>
@@ -718,7 +722,7 @@ export default {
 </script>
 ```
 
-From parent component, you can do like this:
+在父元件上，你可以這樣做：
 ```html
 <template>
   <passing-props-sample
@@ -745,40 +749,43 @@ export default {
 </script>
 ```
 
-#### References:
+#### 參考資料
 
 * [Transparent Wrapper Components in Vue](https://zendev.com/2018/05/31/transparent-wrapper-components-in-vue.html)
 
-## Higher Order Component (a.k.a HOC)
+## 高優先元件 (Higher Order Component, HOC)
 
-#### References:
+#### 參考連結
 
 * [Higher Order Components in Vue.js](https://medium.com/bethink-pl/higher-order-components-in-vue-js-a79951ac9176)
 * [Do we need Higher Order Components in Vue.js?](https://medium.com/bethink-pl/do-we-need-higher-order-components-in-vue-js-87c0aa608f48)
 * [Higher-Order Components in Vue.js](https://medium.com/tldr-tech/higher-order-components-in-vue-js-38b500c6d49f)
 
-## Dependency injection
+## 相依注入 (Dependency injection)
 
-Vue supports provide / inject mechanism to provide `object` into all its descendants, regardless of how deep the component hierarchy is, as long as they are in the same parent chain. Notice that `provide` and `inject` bindings are **not** reactive, unless you pass down an observed object.
+Vue 支援 **提供** 與 **注入** (Provide / inject) 機制來傳遞一個物件到所有子代元件中，不管結構有多深，只要都基於同一個父代即可。
+注意： `provide` 和 `inject` 並沒有響應能力 (reactive) ，除非你傳遞的物件本身就帶有響應能力。
 
 ```html
-<parent-component>
-  <child-component>
-    <grand-child-component></grand-child-component>
+<parent-component>  // 父元件
+  <child-component>  // 子元件
+    <grand-child-component></grand-child-component>  // 孫元件
   </child-component>
 </ancestor-component>
 ```
 
-With above example component hierarchy, in order to derive data from `parent-component`, you should pass down data(object) as `props` to `child-component` and `grand-child-component`. However, if `parent-component` `provide` data(object), `grand-child-component` can just define `inject` provided object from `parent-component`.
+上述的元件結構，若要從 `父元件` 取得資料，你必須要透過 參數(`props`) 傳遞資料到 `子元件` 與 `孫元件` 之中。
+但如果 `父元件` **提供** (`provide`) 資料（或物件）， `孫元件` 可以透過宣告直接 **注入** (`inject`)  `父元件`  中所定義的資料（或物件）。
 
-#### References:
+
+#### 參考連結
 
 * [Official API](https://vuejs.org/v2/api/#provide-inject)
 * [Official Guide](https://vuejs.org/v2/guide/components-edge-cases.html#Dependency-Injection)
 * [Component Communication](https://alligator.io/vuejs/component-communication/#provide--inject)
 * [Dependency Injection in Vue.js App with TypeScript](https://blog.kloud.com.au/2017/03/22/dependency-injection-in-vuejs-app-with-typescript/)
 
-### Provide / Inject
+### **提供** 與 **注入** (Provide / Inject)
 
 ```js
 // ParentComponent.vue
@@ -814,7 +821,7 @@ export default {
 </script>
 ```
 
-### [@Provide / @Inject Decorator](https://github.com/kaorun343/vue-property-decorator)
+### 注入裝飾器模式 ([@Provide / @Inject Decorator](https://github.com/kaorun343/vue-property-decorator))
 
 ```js
 // ParentComponent.vue
@@ -851,9 +858,9 @@ export class GrandChildComponent extends Vue {
 </script>
 ```
 
-## Handling Errors
+## 錯誤處理 (Handling Errors)
 
-### `errorCaptured` Hook
+### `errorCaptured` 事件
 
 ```js
 export default {
@@ -886,20 +893,20 @@ export default {
 </error-boundary>
 ```
 
-#### Examples
+#### 範例
 
 * [Example 1](https://jsfiddle.net/Linusborg/z84wspcg/)
 
-#### References
+#### 參考連結
 
 * [Handling Errors in Vue with Error Boundaries](https://medium.com/@dillonchanis/handling-errors-in-vue-with-error-boundaries-91f6ead0093b)
 
-## Productivity Tips
+## 生產力小技巧
 
-watch on create
+讓監聽器在 created 事件時就有效
 
 ```js
-// don't
+// 不要這樣做
 created() {
   this.fetchUserList();
 },
@@ -909,7 +916,7 @@ watch: {
 ```
 
 ```js
-// do
+// 這樣做
 watch: {
   searchText: {
     handler: 'fetchUserList',
@@ -918,9 +925,9 @@ watch: {
 }
 ```
 
-## Useful Links
+## 有用的連結
 
-### Component Communication
+### 組建間的溝通
 
 * [Vue.js Event Bus + Promises](https://medium.com/@jesusgalvan/vue-js-event-bus-promises-f83e73a81d72)
 * [Vue.js Component Communication Patterns](https://alligator.io/vuejs/component-communication/)
@@ -929,7 +936,7 @@ watch: {
 * [Creating Custom Inputs With Vue.js](https://www.smashingmagazine.com/2017/08/creating-custom-inputs-vue-js/)
 * [Creating a Global Event Bus with Vue.js](https://alligator.io/vuejs/global-event-bus/)
 
-### Refactoring
+### 重構技巧
 
 * [Refactoring Vue: Cleaning Up a List of Posts With Better Component Splitting and More ES6](https://mattstauffer.com/blog/refactoring-vue-cleaning-up-a-list-of-posts-with-better-component-splitting-and-more-es6/?utm_campaign=Revue%20newsletter&utm_medium=Newsletter&utm_source=Vue.js%20Feed)
 * [Clean up your Vue modules with ES6 Arrow Functions](https://gist.github.com/JacobBennett/7b32b4914311c0ac0f28a1fdc411b9a7)
@@ -952,21 +959,21 @@ watch: {
 
 * [Build A View-Framework-Free Data Layer Based on MobX — Integration With Vue (1)](https://itnext.io/build-a-view-framework-free-data-layer-based-on-mobx-integration-with-vue-1-8b524b86c7b8)
 
-### Renderless Component
+### 不須渲染的元件 (Renderless Component)
 
 * [Renderless Components in Vue.js](https://adamwathan.me/renderless-components-in-vuejs/)
 * [Building Renderless Components to Handle CRUD Operations in Vue.js](https://markus.oberlehner.net/blog/building-renderless-components-to-handle-crud-operations-in-vue/)
 
-#### Examples
+#### 範例
 
 * [Renderless Calendar component](https://codesandbox.io/s/v65lx0xvy5)
 
-### Folder Structure
+### 目錄結構
 
 * [How you can improve your workflow using the JavaScript console](https://medium.freecodecamp.org/how-you-can-improve-your-workflow-using-the-javascript-console-bdd7823a9472)
 * [How to Structure a Vue.js Project](https://itnext.io/how-to-structure-a-vue-js-project-29e4ddc1aeeb)
 
-### Tips & Tricks
+### 小技巧
 
 * [How To Build Vue Components Like A Pro 😎](https://blog.bitsrc.io/how-to-build-vue-components-like-a-pro-fd89fd4d524d)
 * [Four tips for working with Vue.js](https://itnext.io/four-tips-for-working-with-vue-js-b362d97de852)
@@ -977,31 +984,31 @@ watch: {
 * [Six random issues and their solutions in VueJS.](https://medium.com/@stijlbreuk/six-random-issues-and-their-solutions-in-vuejs-b16d470a6462)
 * [When VueJS Can't Help You](https://vuejsdevelopers.com/2017/05/01/vue-js-cant-help-head-body/)
 
-### Repos
+### 專案範例
 
 * [vue-enterprise-boilerplate](https://github.com/chrisvfritz/vue-enterprise-boilerplate)
 * [7-secret-patterns](https://github.com/chrisvfritz/7-secret-patterns)
 * [Vue.js-2-Design-Patterns-and-Best-Practices](https://github.com/PacktPublishing/Vue.js-2-Design-Patterns-and-Best-Practices)
 
-### Anti Patterns
+### 不良示範 (反模式)
 
 * [Chris Fritz - Vue.js Anti-Patterns (and How to Avoid Them)](http://www.fullstackradio.com/87)
 * [Common mistakes to avoid while working with Vue.js](https://medium.freecodecamp.org/common-mistakes-to-avoid-while-working-with-vue-js-10e0b130925b)
 
-### Videos / Audios
+### 影片與音訊課程
 
 * [81: Evan You - Advanced Vue Component Design](https://player.fm/series/series-1401837/81-evan-you-advanced-vue-component-design)
 * [7 Secret Patterns Vue Consultants Don’t Want You to Know](https://www.youtube.com/watch?v=7YZ5DwlLSt8)
 
 
-### Paid
+### 付費課程
 
 * [Advanced Vue Component Design](https://adamwathan.me/advanced-vue-component-design/)
 
 
 ---
 
-### Misc
+### 其他資訊
 
 
 * [Creating an Interpose Vue component from a React implementation](https://itnext.io/creating-an-interpose-vue-component-from-a-react-implementation-80d367a695c6)
