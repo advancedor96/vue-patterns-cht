@@ -1,4 +1,4 @@
-# Vue 實作模式 (learn-vuejs) 中文版
+# Vue 實作模式 (vue-patterns) 中文版
 
 英文原版：[learn-vuejs](https://github.com/learn-vuejs/vue-patterns)  
 中文翻譯：[yoyoys](https://github.com/yoyoys)
@@ -80,7 +80,7 @@ export default {
 </style>
 ```
 
-### 字串樣板 (String Template) (或是 es6 樣板字面值 (Template Literal)))
+### 字串樣板 (String Template) (或是 es6 樣板字面值 (Template Literal))
 
 ```js
 Vue.component('my-btn', {
