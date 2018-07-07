@@ -13,6 +13,9 @@
     - [JSX](#jsx)
     - [vue-class-component (使用 es6 classes)](#vue-class-component-%E4%BD%BF%E7%94%A8-es6-classes)
       - [參考連結](#%E5%8F%83%E8%80%83%E9%80%A3%E7%B5%90)
+  - [元件之間的溝通（Component Communication）](#%E5%85%83%E4%BB%B6%E4%B9%8B%E9%96%93%E7%9A%84%E6%BA%9D%E9%80%9Acomponent-communication)
+    - [屬性與事件（Props and Events）](#%E5%B1%AC%E6%80%A7%E8%88%87%E4%BA%8B%E4%BB%B6props-and-events)
+  - [元件事件處理方法（Component Events Handling）](#%E5%85%83%E4%BB%B6%E4%BA%8B%E4%BB%B6%E8%99%95%E7%90%86%E6%96%B9%E6%B3%95component-events-handling)
   - [元件條件渲染 (Component Conditional Rendering)](#%E5%85%83%E4%BB%B6%E6%A2%9D%E4%BB%B6%E6%B8%B2%E6%9F%93-component-conditional-rendering)
     - [指令 (Directives) (`v-if` / `v-else` / `v-else-if` / `v-show`)](#%E6%8C%87%E4%BB%A4-directives-v-if--v-else--v-else-if--v-show)
     - [JSX](#jsx)
@@ -34,17 +37,21 @@
     - [`errorCaptured` 事件](#errorcaptured-%E4%BA%8B%E4%BB%B6)
   - [生產力小技巧](#%E7%94%9F%E7%94%A2%E5%8A%9B%E5%B0%8F%E6%8A%80%E5%B7%A7)
   - [有用的連結](#%E6%9C%89%E7%94%A8%E7%9A%84%E9%80%A3%E7%B5%90)
-    - [組建間的溝通](#%E7%B5%84%E5%BB%BA%E9%96%93%E7%9A%84%E6%BA%9D%E9%80%9A)
     - [重構技巧](#%E9%87%8D%E6%A7%8B%E6%8A%80%E5%B7%A7)
+    - [狀態管理](#%E7%8B%80%E6%85%8B%E7%AE%A1%E7%90%86)
     - [Vuex](#vuex)
     - [Mobx](#mobx)
     - [不須渲染的元件 (Renderless Component)](#%E4%B8%8D%E9%A0%88%E6%B8%B2%E6%9F%93%E7%9A%84%E5%85%83%E4%BB%B6-renderless-component)
     - [目錄結構](#%E7%9B%AE%E9%8C%84%E7%B5%90%E6%A7%8B)
     - [小技巧](#%E5%B0%8F%E6%8A%80%E5%B7%A7)
-    - [專案範例](#%E5%B0%88%E6%A1%88%E7%AF%84%E4%BE%8B)
+    - [路由（Router）](#%E8%B7%AF%E7%94%B1Router)
     - [不良示範 (反模式)](#%E4%B8%8D%E8%89%AF%E7%A4%BA%E7%AF%84-%E5%8F%8D%E6%A8%A1%E5%BC%8F)
     - [影片與音訊課程](#%E5%BD%B1%E7%89%87%E8%88%87%E9%9F%B3%E8%A8%8A%E8%AA%B2%E7%A8%8B)
+    - [專案範例](#%E5%B0%88%E6%A1%88%E7%AF%84%E4%BE%8B)
     - [付費課程](#%E4%BB%98%E8%B2%BB%E8%AA%B2%E7%A8%8B)
+    - [Typescript](#typescript)
+    - [Flowtype](#flowtype)
+    - [GraphQL](#graphql)
     - [其他資訊](#%E5%85%B6%E4%BB%96%E8%B3%87%E8%A8%8A)
 
 ## 元件宣告
@@ -186,6 +193,69 @@ export default MyBtn extends Vue {
 #### 參考連結
 
 * [7 Ways To Define A Component Template in VueJS](https://medium.com/js-dojo/7-ways-to-define-a-component-template-in-vuejs-c04e0c72900d)
+
+## 元件之間的溝通（Component Communication）
+
+### 屬性與事件（Props and Events）
+
+基本上，Vue 元件是依照單向資料流傳遞資料，這就是屬性進、事件出（props down, event up）[請參考官方說明](https://vuejs.org/v2/guide/components-props.html#One-Way-Data-Flow)）。
+（譯註：也有稱作props in, emit out。）
+屬性（props）是唯讀的資料，所以不可能從子元件內部修改他的值，若是外部傳入的屬性變化了，子元件將會自動重繪（因為屬性是反應性資料）。
+子元件只能將事件發送到父代，藉此父代可以修改資料（`data`） ，這個資料也對應到子元件的屬性（`props`）。
+
+```html
+<template>
+  <button @click="$emit('click')">{{text}}</button>
+</template>
+
+<script>
+export default {
+  name: 'v-btn',
+  props: {
+    text: String,
+  },
+};
+</script>
+```
+
+```html
+<template>
+  <v-btn :text="buttonText" @click="handleClick"></v-btn>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      clickCount: 0,
+      buttonText: 'initial button text',
+    };
+  },
+  methods: {
+    handleClick() {
+      this.buttonText = `Button clicked ${++this.clickCount}`;
+      console.log('clicked', this.buttonText);
+    }
+  }
+};
+</script>
+```
+
+#### 參考連結:
+
+ [Vue.js Component Communication Patterns](https://alligator.io/vuejs/component-communication/)
+* [Creating Custom Inputs With Vue.js]https://www.smashingmagazine.com/2017/08/creating-custom-inputs-vue-js/)
+* [Vue Sibling Component Communication](https://vegibit.com/vue-sibling-component-communication/)
+* [Managing State in Vue.js](https://medium.com/fullstackio/managing-state-in-vue-js-23a0352b1c87)
+
+## 元件事件處理方法（Component Events Handling）
+
+#### 參考連結:
+
+* [Leveraging Vue events to reduce prop declarations](https://itnext.io/leveraging-vue-events-to-reduce-prop-declarations-e38f5dce2aaf)
+* [Vue.js Component Hooks as Events](https://alligator.io/vuejs/component-event-hooks/)
+* [Creating a Global Event Bus with Vue.js](https://alligator.io/vuejs/global-event-bus/)
+* [Vue.js Event Bus + Promises](https://medium.com/@jesusgalvan/vue-js-event-bus-promises-f83e73a81d72)
 
 ## 元件條件渲染 (Component Conditional Rendering)
 
@@ -371,6 +441,13 @@ export default {
   <component :is="currentTabComponent"></component>
 </keep-alive>
 ```
+#### 參考連結
+
+* [Dynamic Component Templates with Vue.js](https://medium.com/scrumpy/dynamic-component-templates-with-vue-js-d9236ab183bb)
+
+#### 元件庫
+
+* [Proppy - Functional props composition for components](https://proppyjs.com/)
 
 ## 元件組合
 
@@ -459,7 +536,7 @@ export default {
 <script>
 import closableMixin from './mixins/closableMixin';
 
-export deafult {
+export default {
   mixins: [closableMixin],
   props: ['text']
 };
@@ -510,6 +587,7 @@ export default {
 
 * [Understanding Component Slots with Vue.js](https://alligator.io/vuejs/component-slots/)
 * [Composing Custom Elements With Slots And Named Slots](https://alligator.io/web-components/composing-slots-named-slots/)
+* [Writing Abstract Components with Vue.js](https://alligator.io/vuejs/vue-abstract-components/)
 
 ### 具名插槽(Named Slots)
 
@@ -771,7 +849,7 @@ Vue 支援 **提供** 與 **注入** (Provide / inject) 機制來傳遞一個物
   <child-component>  // 子元件
     <grand-child-component></grand-child-component>  // 孫元件
   </child-component>
-</ancestor-component>
+</parent-component>
 ```
 
 上述的元件結構，若要從 `父元件` 取得資料，你必須要透過 參數(`props`) 傳遞資料到 `子元件` 與 `孫元件` 之中。
@@ -927,14 +1005,9 @@ watch: {
 
 ## 有用的連結
 
-### 組建間的溝通
-
-* [Vue.js Event Bus + Promises](https://medium.com/@jesusgalvan/vue-js-event-bus-promises-f83e73a81d72)
-* [Vue.js Component Communication Patterns](https://alligator.io/vuejs/component-communication/)
-* [Leveraging Vue events to reduce prop declarations](https://itnext.io/leveraging-vue-events-to-reduce-prop-declarations-e38f5dce2aaf)
-* [Control DOM Outside Your Vue.js App with portal-vue](https://alligator.io/vuejs/portal-vue/)
-* [Creating Custom Inputs With Vue.js](https://www.smashingmagazine.com/2017/08/creating-custom-inputs-vue-js/)
-* [Creating a Global Event Bus with Vue.js](https://alligator.io/vuejs/global-event-bus/)
+### 風格指南
+* [Official - Style Guide](https://vuejs.org/v2/style-guide/)
+* [Vue.js Component Style Guide](https://github.com/pablohpsilva/vuejs-component-style-guide)
 
 ### 重構技巧
 
@@ -942,6 +1015,11 @@ watch: {
 * [Clean up your Vue modules with ES6 Arrow Functions](https://gist.github.com/JacobBennett/7b32b4914311c0ac0f28a1fdc411b9a7)
 * [Examples of Vue’s Clean Code](https://webdesign.tutsplus.com/tutorials/examples-of-vues-clean-code--cms-29619)
 * [Optimizing Performance with Computed Properties](https://codingexplained.com/coding/front-end/vue-js/optimizing-performance-computed-properties)
+
+### 狀態管理
+
+* [Managing State in Vue.js](https://medium.com/fullstackio/managing-state-in-vue-js-23a0352b1c87)
+
 
 ### Vuex
 
@@ -954,7 +1032,7 @@ watch: {
 * [Why VueX Is The Perfect Interface Between Frontend and API](https://codeburst.io/why-vuex-is-the-perfect-interface-between-frontend-and-api-271d92161709)
 * [Composing actions with Vuex](https://codeburst.io/composing-actions-with-vuex-b63466264a37)
 * [How to Build Complex, Large-Scale Vue.js Apps With Vuex](https://code.tutsplus.com/tutorials/how-to-build-complex-large-scale-vuejs-applications-with-vuex--cms-30952)
-
+* [Should I Store This Data in Vuex?](https://markus.oberlehner.net/blog/should-i-store-this-data-in-vuex/)
 ### Mobx
 
 * [Build A View-Framework-Free Data Layer Based on MobX — Integration With Vue (1)](https://itnext.io/build-a-view-framework-free-data-layer-based-on-mobx-integration-with-vue-1-8b524b86c7b8)
@@ -972,6 +1050,8 @@ watch: {
 
 * [How you can improve your workflow using the JavaScript console](https://medium.freecodecamp.org/how-you-can-improve-your-workflow-using-the-javascript-console-bdd7823a9472)
 * [How to Structure a Vue.js Project](https://itnext.io/how-to-structure-a-vue-js-project-29e4ddc1aeeb)
+* [Large-scale Vuex application structures](https://medium.com/3yourmind/large-scale-vuex-application-structures-651e44863e2f)
+* [Vue.js Application Structure and CSS Architecture](https://markus.oberlehner.net/blog/vue-application-structure-and-css-architecture/)
 
 ### 小技巧
 
@@ -983,6 +1063,25 @@ watch: {
 * [Vue.js — Considerations and Tricks](https://blog.webf.zone/vue-js-considerations-and-tricks-fa7e0e4bb7bb)
 * [Six random issues and their solutions in VueJS.](https://medium.com/@stijlbreuk/six-random-issues-and-their-solutions-in-vuejs-b16d470a6462)
 * [When VueJS Can't Help You](https://vuejsdevelopers.com/2017/05/01/vue-js-cant-help-head-body/)
+* [Things that won’t work using Vue](https://winnercrespo.com/things-that-wont-work-using-vue/)
+* [Tip#15 Delay execution with _.debounce](https://medium.com/vuejs-tips/tip-15-delay-execution-with-debounce-6a93b759bb06)
+
+### 路由（Router）
+
+* [Navigation Guards - Official](https://router.vuejs.org/guide/advanced/navigation-guards.html#global-guards)
+* [Vue Router Navigation Guards with Vuex](https://serversideup.net/vue-router-navigation-guards-vuex/)
+
+### 不良示範 (反模式)
+
+* [Chris Fritz - Vue.js Anti-Patterns (and How to Avoid Them)](http://www.fullstackradio.com/87)
+* [Common mistakes to avoid while working with Vue.js](https://medium.freecodecamp.org/common-mistakes-to-avoid-while-working-with-vue-js-10e0b130925b)
+* [Avoid This Common Anti-Pattern In Full-Stack Vue/Laravel Apps](https://vuejsdevelopers.com/2017/08/06/vue-js-laravel-full-stack-ajax/)
+* [[Video] - VueNYC - Three Vue code smells, and what you can do about them - Matt Rothenberg (@mattrothenberg)](https://www.youtube.com/watch?v=z5UWVOeIsUQ)
+
+### 影片與音訊課程
+
+* [81: Evan You - Advanced Vue Component Design](https://player.fm/series/series-1401837/81-evan-you-advanced-vue-component-design)
+* [7 Secret Patterns Vue Consultants Don’t Want You to Know](https://www.youtube.com/watch?v=7YZ5DwlLSt8)
 
 ### 專案範例
 
@@ -990,21 +1089,20 @@ watch: {
 * [7-secret-patterns](https://github.com/chrisvfritz/7-secret-patterns)
 * [Vue.js-2-Design-Patterns-and-Best-Practices](https://github.com/PacktPublishing/Vue.js-2-Design-Patterns-and-Best-Practices)
 
-### 不良示範 (反模式)
-
-* [Chris Fritz - Vue.js Anti-Patterns (and How to Avoid Them)](http://www.fullstackradio.com/87)
-* [Common mistakes to avoid while working with Vue.js](https://medium.freecodecamp.org/common-mistakes-to-avoid-while-working-with-vue-js-10e0b130925b)
-
-### 影片與音訊課程
-
-* [81: Evan You - Advanced Vue Component Design](https://player.fm/series/series-1401837/81-evan-you-advanced-vue-component-design)
-* [7 Secret Patterns Vue Consultants Don’t Want You to Know](https://www.youtube.com/watch?v=7YZ5DwlLSt8)
-
-
 ### 付費課程
 
 * [Advanced Vue Component Design](https://adamwathan.me/advanced-vue-component-design/)
+* [Advanced Vue.js Features from the Ground Up](https://frontendmasters.com/courses/advanced-vue/)
 
+
+### Typescript
+
+* [Vue + TypeScript: A Match Made in Your Code Editor](https://css-tricks.com/vue-typescript-a-match-made-in-your-code-editor/)
+* [Writing Class-Based Components with Vue.js and TypeScript](https://alligator.io/vuejs/typescript-class-components/)
+
+### Flowtype
+
+### GraphQL
 
 ---
 
@@ -1028,7 +1126,6 @@ watch: {
 * [Creating Vue.js Component Instances Programmatically](https://css-tricks.com/creating-vue-js-component-instances-programmatically/)
 * [Managing User Permissions in a Vue.js App](https://dzone.com/articles/managing-user-permissions-in-a-vuejs-app)
 * [Render Functional Components in Vue.js](https://alligator.io/vuejs/render-functional-components/)
-* [Templating in Vue: Separation of Concerns or Separation of Technology or something else?](https://medium.com/@s.molinari/templating-separation-of-concerns-or-separation-of-technology-or-something-else-123a3d41f0b4)
 * [Looping through Object Properties](https://codingexplained.com/coding/front-end/vue-js/looping-object-properties)
 * [Cancelling async operations in Vue.js](https://codeburst.io/cancelling-async-operations-in-vue-js-3d0f3c2de598)
 * [Scoped styles with v-html](https://medium.com/@brockreece/scoped-styles-with-v-html-c0f6d2dc5d8e)
@@ -1038,3 +1135,8 @@ watch: {
 * [Making responsive Vue components with ResizeObserver](https://itnext.io/making-adaptive-vue-components-with-resizeobserver-123b5ebb20ae)
 * [An imperative guide to forms in Vue.js](https://blog.logrocket.com/an-imperative-guide-to-forms-in-vue-js-7536bfa374e0)
 * [Vue.js: the good, the meh, and the ugly](https://medium.com/@Pier/vue-js-the-good-the-meh-and-the-ugly-82800bbe6684)
+* [Dynamic Vue.js Layout Components](https://markus.oberlehner.net/blog/dynamic-vue-layout-components/)
+* [Advanced Vue.js concepts: mixins, custom directives, filters, transitions, and state management](https://blog.logrocket.com/advanced-vue-js-concepts-mixins-custom-directives-filters-transitions-and-state-management-ca6955905156)
+* [Introducing the Single Element Pattern](https://medium.freecodecamp.org/introducing-the-single-element-pattern-dfbd2c295c5d)
+* [Control DOM Outside Your Vue.js App with portal-vue](https://alligator.io/vuejs/portal-vue/)
+* [Add i18n and manage translations of a Vue.js powered website](https://medium.com/hypefactors/add-i18n-and-manage-translations-of-a-vue-js-powered-website-73b4511ca69c)
