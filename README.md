@@ -1,7 +1,8 @@
 # Vue 實作模式 (vue-patterns) 中文版
 
 英文原版：[learn-vuejs](https://github.com/learn-vuejs/vue-patterns)  
-中文翻譯：[yoyoys](https://github.com/yoyoys)
+繁體中文翻譯：[yoyoys](https://github.com/yoyoys/vue-patterns-cht)  
+簡體中文翻譯：[ZYSzys](https://github.com/ZYSzys/vue-patterns-cn)
 
 此頁面集結了許多有用的 Vue 實作模式、技術、技巧、以及有幫助的參考連結。
 
@@ -243,8 +244,8 @@ export default {
 
 #### 參考連結:
 
- [Vue.js Component Communication Patterns](https://alligator.io/vuejs/component-communication/)
-* [Creating Custom Inputs With Vue.js]https://www.smashingmagazine.com/2017/08/creating-custom-inputs-vue-js/)
+* [Vue.js Component Communication Patterns](https://alligator.io/vuejs/component-communication/)
+* [Creating Custom Inputs With Vue.js](https://www.smashingmagazine.com/2017/08/creating-custom-inputs-vue-js/)
 * [Vue Sibling Component Communication](https://vegibit.com/vue-sibling-component-communication/)
 * [Managing State in Vue.js](https://medium.com/fullstackio/managing-state-in-vue-js-23a0352b1c87)
 
@@ -419,6 +420,8 @@ export default {
 };
 ```
 #### 參考連結
+
+* [Conditional Rendering](https://vuejs.org/v2/guide/conditional.html)
 * [Difference Between v-if and v-show [With Video at End]](https://dzone.com/articles/difference-between-v-if-and-v-show-with-a-video)
 
 ## 動態元件
@@ -471,10 +474,12 @@ export default {
 </script>
 ```
 
+#### 參考連結
+
+* [Official - Composing with Components](https://vuejs.org/v2/guide/#Composing-with-Components)
+
+
 ### 繼承 (Extends)
-
-當你需要繼承一個單文件組件 (SFC) 時可以使用。
-
 ```html
 <template>
   <button class="button-primary" @click.prevent="handleClick">
@@ -494,6 +499,7 @@ export default {
 
 #### 參考連結
 
+* [Official - extends](https://vuejs.org/v2/api/#extends)
 * [Extending VueJS Components](https://medium.com/js-dojo/extending-vuejs-components-42fefefc688b)
 
 ### 混入 (Mixins)
@@ -545,6 +551,7 @@ export default {
 
 #### 參考連結
 
+* [Official - mixins](https://vuejs.org/v2/guide/mixins.html)
 * [Practical use of Components and Mixins in Vue JS](http://www.qcode.in/practical-use-of-components-and-mixins-in-vue-js/)
 
 
@@ -574,7 +581,7 @@ export default {
 
 <script>
 import VBtn from './VBtn';
-  
+
 export default {
   components: {
     VBtn,
@@ -777,7 +784,7 @@ export default Mouse;
 ## 參數傳遞 (Passing Props)
 
 有時候你想要傳遞所有參數 (props) 與事件 (listeners) 到子元件，但又不想要宣告所有子元件的參數。
-你可以直接將 `$attrs` 與 `$listeners` 綁定在子元件上。
+你可以直接將 `$attrs` 與 `$listeners` 綁定在子元件上，並設定 `inheritAttrs` 為 `false` （若不設定後者，`div` 元素也會收到這些屬性）。
 
 ```html
 <template>
@@ -790,6 +797,7 @@ export default Mouse;
 <script>
 export default {
   name: 'PassingPropsSample'
+  inheritAttrs: false,
   props: {
     title: {
       type: String,
@@ -952,7 +960,7 @@ export default {
   errorCaptured (err, vm, info) {
     this.error = true;
     this.errorMessage = `${err.stack}\n\nfound in ${info} of component`;
-    
+
     return false;
   },
   render (h) {
@@ -1033,6 +1041,7 @@ watch: {
 * [Composing actions with Vuex](https://codeburst.io/composing-actions-with-vuex-b63466264a37)
 * [How to Build Complex, Large-Scale Vue.js Apps With Vuex](https://code.tutsplus.com/tutorials/how-to-build-complex-large-scale-vuejs-applications-with-vuex--cms-30952)
 * [Should I Store This Data in Vuex?](https://markus.oberlehner.net/blog/should-i-store-this-data-in-vuex/)
+
 ### Mobx
 
 * [Build A View-Framework-Free Data Layer Based on MobX — Integration With Vue (1)](https://itnext.io/build-a-view-framework-free-data-layer-based-on-mobx-integration-with-vue-1-8b524b86c7b8)
@@ -1107,7 +1116,6 @@ watch: {
 ---
 
 ### 其他資訊
-
 
 * [Creating an Interpose Vue component from a React implementation](https://itnext.io/creating-an-interpose-vue-component-from-a-react-implementation-80d367a695c6)
 * [Composing computed properties in Vue.js](https://medium.com/@kevin_peters/composing-computed-properties-in-vue-js-87b4507af079)
